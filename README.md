@@ -9,6 +9,45 @@ Compared to the version of the forked one,
   stmt.fields.emplace_back(pgwire::FieldDescription{name, oid});
 ```
 
+  Theory related to this:
+```c++
+struct S {
+  int a;
+  int b;
+}
+
+int main() {
+  S s1{2, 3}; // aggregate initialization
+  S s2; // default initialization with a and b set to 0;
+  // when you call it like this
+  std::vector<S> ss;
+  ss.emplace_back(2, 3); // This fails as there isn't an allocator for S that expects two int initializers (aggregate initialization is just a convenient syntax & semantic)
+  ss.emplace_back(); // This works though because the allocator picked for S is the compiler's default constructor
+  ss.emplace_back(S{2,3}); // This works though because the allocator picked for S is the compiler's default copy constructor
+}
+```
+
+The FieldDescription struct in the repo does not work because it runs into the same situation.
+
+Adding an explicit constructor would work:
+
+```c++
+struct S {
+  int a;
+  int b;
+
+  S(int a, int b): a { a }, b { b } {}
+}
+
+int main() {
+  // when you call it like this
+  std::vector<S> ss;
+  ss.emplace_back(2, 3); // This now succeeds because there's an allocator for two int initializer
+}
+```
+
+Disclaimer: just my theory, I haven't dug into how Allocator in C++ works though
+
 ## Introduction
 This extension is used for experimentation of adding PostgreSQL wire protocol to the DuckDB ecosystem through an extension named `duckdb_pgwire`.
 
