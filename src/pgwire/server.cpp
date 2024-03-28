@@ -97,8 +97,8 @@ void Session::process_message(ParseHandler &handler, FrontendMessagePtr msg) {
         prepared.handler(writer, {});
         this->write(encode_bytes(writer));
 
-        this->write(encode_bytes(
-            CommandComplete{std::format("SELECT {}", writer.num_rows())}));
+        auto command = std::ostringstream{};
+        this->write(encode_bytes(CommandComplete{(command << "SELECT " << writer.num_rows(), command).str()}));
 
         this->write(encode_bytes(ReadyForQuery{}));
 

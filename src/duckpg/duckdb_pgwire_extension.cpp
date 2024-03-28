@@ -121,7 +121,7 @@ static pgwire::ParseHandler duckdb_handler(DatabaseInstance &db) {
                 break;
             }
 
-            stmt.fields.emplace_back(name, oid);
+            stmt.fields.emplace_back({name, oid});
         }
 
         stmt.handler = [column_total, p = std::move(prepared)](
