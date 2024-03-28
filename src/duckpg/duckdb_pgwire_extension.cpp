@@ -10,6 +10,7 @@
 
 #include <atomic>
 #include <mutex>
+#include <pgwire/protocol.hpp>
 #include <pgwire/server.hpp>
 #include <pgwire/types.hpp>
 #include <stdexcept>
@@ -121,7 +122,7 @@ static pgwire::ParseHandler duckdb_handler(DatabaseInstance &db) {
                 break;
             }
 
-            stmt.fields.emplace_back({name, oid});
+            stmt.fields.emplace_back(pgwire::FieldDescription{name, oid});
         }
 
         stmt.handler = [column_total, p = std::move(prepared)](
