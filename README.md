@@ -6,7 +6,7 @@ Compared to the version of the forked one,
 * `std::format` is not supported until C++23, so currently, `std::ostringstream` is used as a workaround.
 * In `/src/duckpg/duckdb_pgwire_extension.cpp`, the line 125 is changed to
 ```c++
-  stmt.fields.emplace_back({name, oid});
+  stmt.fields.emplace_back(pgwire::FieldDescription{name, oid});
 ```
 
 ## Introduction
