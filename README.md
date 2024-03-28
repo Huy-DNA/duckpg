@@ -1,5 +1,15 @@
 # DuckPG - DuckDB extension with postgresql wire protocol enabled
 
+## Changelog for this fork
+Compared to the version of the forked one,
+
+* `std::format` is not supported until C++23, so currently, `std::ostringstream` is used as a workaround.
+* In `/src/duckpg/duckdb_pgwire_extension.cpp`, the line 125 is changed to
+```c++
+  stmt.fields.emplace_back({name, oid});
+```
+
+## Introduction
 This extension is used for experimentation of adding PostgreSQL wire protocol to the DuckDB ecosystem through an extension named `duckdb_pgwire`.
 
 The PostgreSQL wire protocol is implemented in standalone component/library named `pgwire` that heavily inspired by https://github.com/returnString/convergence and https://github.com/jeroenrinzema/psql-wire.
@@ -21,7 +31,7 @@ The PostgreSQL wire protocol is implemented in standalone component/library name
 
 Clone the repository along with the submodule with :
 ```bash
-git clone --recurse-submodules https://github.com/euiko/duckpg.git
+git clone --recurse-submodules https://github.com/Huy-DNA/duckpg.git
 ```
 
 Build the extension
